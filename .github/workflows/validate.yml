@@ -1,0 +1,30 @@
+name: Validate project metadata
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Validate JSON metadata
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          files = [Path("Etherroad.uproject"), *Path(".").rglob("*.uplugin")]
+          for path in files:
+              json.loads(path.read_text(encoding="utf-8"))
+              print(f"OK {path}")
+          PY
+      - name: Check Python syntax
+        run: python -m py_compile Scripts/Editor/CreateEtherroadAssets.py
+      - name: Verify required source files
+        run: |
+          test -f Source/Etherroad/Etherroad.Build.cs
+          test -f Source/Etherroad/Private/ERPlayerCharacter.cpp
+          test -f Plugins/EtherroadCore/Source/ERCore/Private/ERCore.cpp
