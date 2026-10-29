@@ -1,0 +1,5 @@
+ItemId,DisplayName,Description,Rarity,MaxStackSize,VendorValue,Tradable
+item.herb.moonleaf,Moonleaf,"A luminous herb found near ancient roads.",Uncommon,99,12,true
+item.ore.iron,Iron Ore,"Common ore used by blacksmiths.",Common,99,5,true
+item.potion.minor_health,Minor Health Potion,"Restores a small amount of health.",Common,20,25,true
+item.material.ether_shard,Ether Shard,"A volatile crystal used in advanced crafting.",Rare,50,100,true
