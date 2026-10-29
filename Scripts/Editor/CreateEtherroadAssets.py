@@ -56,19 +56,20 @@ def main():
     player_class = unreal.load_class(None, "/Script/Etherroad.ERPlayerCharacter")
     enemy_class = unreal.load_class(None, "/Script/ERCore.EREnemyCharacter")
     resource_class = unreal.load_class(None, "/Script/ERCore.ERResourceNode")
+    loot_class = unreal.load_class(None, "/Script/ERCore.ERLootContainer")
     character_class = unreal.load_class(None, "/Script/Engine.Character")
     actor_class = unreal.load_class(None, "/Script/Engine.Actor")
 
     if not player_class:
         raise RuntimeError("ERPlayerCharacter was not found. Compile the EtherroadEditor target first.")
-    if not enemy_class or not resource_class:
-        raise RuntimeError("ERCore enemy/resource classes were not found. Compile the ERCore plugin first.")
+    if not enemy_class or not resource_class or not loot_class:
+        raise RuntimeError("ERCore enemy, resource, or loot classes were not found. Compile the ERCore plugin first.")
 
     ensure_blueprint("BP_PlayerCharacter", f"{ROOT}/Blueprints/Characters", player_class)
     ensure_blueprint("BP_EnemyCharacter", f"{ROOT}/Blueprints/Characters", enemy_class)
     ensure_blueprint("BP_NPCCharacter", f"{ROOT}/Blueprints/Characters", character_class)
     ensure_blueprint("BP_ResourceNode", f"{ROOT}/Blueprints/World/Interactables", resource_class)
-    ensure_blueprint("BP_LootContainer", f"{ROOT}/Blueprints/World/Interactables", actor_class)
+    ensure_blueprint("BP_LootContainer", f"{ROOT}/Blueprints/World/Interactables", loot_class)
 
     for widget in (
         "WBP_HUD", "WBP_Inventory", "WBP_Character", "WBP_QuestTracker",
@@ -78,8 +79,8 @@ def main():
 
     for folder in (
         "Data/Items", "Data/Abilities", "Data/Classes", "Data/Quests",
-        "Data/Enemies", "Data/Biomes", "Data/Regions", "Maps/Startup",
-        "Maps/Prototype", "Maps/World"
+        "Data/Enemies", "Data/LootTables", "Data/Biomes", "Data/Regions",
+        "Maps/Startup", "Maps/Prototype", "Maps/World"
     ):
         ensure_folder(f"{ROOT}/{folder}")
 
