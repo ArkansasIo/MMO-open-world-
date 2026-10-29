@@ -1,6 +1,7 @@
 #include "ERResourceNode.h"
 #include "ERInventoryComponent.h"
 #include "GameFramework/Actor.h"
+#include "Net/UnrealNetwork.h"
 
 AERResourceNode::AERResourceNode()
 {
@@ -25,4 +26,10 @@ void AERResourceNode::Interact_Implementation(AActor* Interactor)
         RemainingQuantity -= Amount;
         ForceNetUpdate();
     }
+}
+
+void AERResourceNode::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
+{
+    Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+    DOREPLIFETIME(AERResourceNode, RemainingQuantity);
 }
