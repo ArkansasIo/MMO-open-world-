@@ -14,7 +14,7 @@ public:
     UPROPERTY(EditInstanceOnly, BlueprintReadOnly, Category="Resource", meta=(ExposeOnSpawn="true"))
     FName ResourceItemId = FName("wood");
 
-    UPROPERTY(EditInstanceOnly, BlueprintReadOnly, Category="Resource", meta=(ClampMin="1", ExposeOnSpawn="true"))
+    UPROPERTY(Replicated, EditInstanceOnly, BlueprintReadOnly, Category="Resource", meta=(ClampMin="0", ExposeOnSpawn="true"))
     int32 RemainingQuantity = 5;
 
     UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="Resource", meta=(ClampMin="1"))
@@ -22,4 +22,5 @@ public:
 
     virtual bool CanInteract_Implementation(AActor* Interactor) const override;
     virtual void Interact_Implementation(AActor* Interactor) override;
+    virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 };
