@@ -9,7 +9,7 @@ public class Etherroad : ModuleRules
         {
             "Core", "CoreUObject", "Engine", "InputCore",
             "EnhancedInput", "NetCore", "GameplayTags",
-            "GameplayTasks", "AIModule", "EtherroadCore"
+            "GameplayTasks", "AIModule", "ERCore"
         });
         PrivateDependencyModuleNames.AddRange(new[] { "UMG", "Slate", "SlateCore" });
     }
