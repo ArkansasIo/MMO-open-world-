@@ -6,14 +6,14 @@ Etherroad is an original open-world MMORPG prototype targeting Unreal Engine 5.7
 
 ## Gameplay foundations
 
-- Replicated player character and starter game mode.
-- Replicated inventory, attributes, equipment, XP progression, quest progress, combat abilities, and interaction components.
-- Data Asset-based ability definitions with server-side range/cooldown checks and damage routed to supported target health systems.
-- Replicated enemy character and resource node native classes for Blueprint extension.
-- Editor Python script creates starter Blueprint and Widget Blueprint shells, including native enemy/resource parents.
+- Replicated player character with combat, inventory, equipment, interaction, progression, and quest components.
+- Data Asset-based combat abilities with server-side range/cooldown checks and damage routing.
+- Replicated enemy, resource node, and loot-container native classes for Blueprint extension.
+- Seeded loot-table Data Assets and a server-side loot-container transfer flow.
+- Editor Python script creates starter Blueprint and Widget Blueprint shells, including native enemy, resource, and loot-container parents.
 - Starter CSV catalogs for items, regions, and quests.
 - Fastify health and realm-discovery endpoints. Session allocation intentionally returns HTTP 503 until identity verification, capacity-aware allocation, leases/fencing, and signed one-time tickets are implemented.
-- PostgreSQL initial schema, Docker Compose, architecture notes, Blueprint graph guides, and CI metadata/syntax checks.
+- PostgreSQL starter schema plus follow-on idempotency, character-save version, game-server process, and join-ticket tables.
 
 ## Repository layout
 
@@ -23,7 +23,7 @@ Config/
 Content/Data/{Items,Regions,Quests}/
 Plugins/EtherroadCore/Source/ERCore/
 Source/{Etherroad,EtherroadEditor}/
-Backend/{src,migrations}/
+Backend/{src,migrations,docs}/
 Scripts/Editor/
 Docs/
 Tests/
@@ -38,6 +38,7 @@ Tests/
 4. Enable Unreal's Python Editor Script Plugin and run Scripts/Editor/CreateEtherroadAssets.py.
 5. Open generated assets, wire and validate their graphs/layouts, then save them in the editor.
 6. Start the local backend with Docker Compose from Backend/ or run the Node service directly.
+7. Apply SQL migrations through a migration runner in development; review and test them before any production use.
 
 ## Architecture rules
 
@@ -57,12 +58,15 @@ Tests/
 - [World generation contract](Docs/WorldGeneration.md)
 - [Combat, equipment, and progression](Docs/Systems/Combat-Equipment-Progression.md)
 - [World interaction and AI](Docs/Systems/World-Interaction-and-AI.md)
+- [Loot and rewards](Docs/Systems/Loot-and-Rewards.md)
+- [Quest rewards and persistence](Docs/Systems/Quest-Rewards-and-Persistence.md)
 - [Backend economy transaction contract](Backend/docs/Economy-Transactions.md)
-- [Test plan](Tests/README.md)
+- [Character persistence contract](Backend/docs/Character-Persistence.md)
+- [Required gameplay checks](Tests/Required-Gameplay-Checks.md)
 
 ## Important implementation limits
 
-The current code is a starter foundation. Unreal C++ compilation, generated Blueprint assets, multiplayer contention tests, backend integration tests, and production deployment have not been verified. Ability stamina cost, full loot/reward attribution, AI behavior trees, item ownership validation, persistence, authentication, and production session allocation remain incomplete.
+The current code is a starter foundation. Unreal C++ compilation, generated Blueprint assets, multiplayer contention tests, backend integration tests, and production deployment have not been verified. Ability stamina cost, complete AI behavior trees, persistent loot/reward attribution, item ownership validation, save/load APIs, authentication, and production session allocation remain incomplete.
 
 ## License
 
