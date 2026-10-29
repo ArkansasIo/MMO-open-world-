@@ -1,0 +1,5 @@
+RegionId,DisplayName,Biome,GeneratorVersion,DefaultSeed,RegionExtentMeters
+region.greenreach,Greenreach,TemperateForest,1,13579,10000
+region.frostmarch,Frostmarch,Tundra,1,24680,10000
+region.sunscar,Sunscar,Desert,1,97531,10000
+region.emberfall,Emberfall,Volcanic,1,86420,10000
