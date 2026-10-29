@@ -1,80 +1,61 @@
 # Etherroad MMO
 
-Etherroad is an original open-world MMORPG project targeting Unreal Engine 5.7, with a Blueprint-first gameplay workflow backed by reusable C++ systems.
+Etherroad is an original open-world MMORPG prototype targeting Unreal Engine 5.7. This repository now contains a starter Unreal project, C++ gameplay foundation, an `EtherroadCore` plugin, an editor asset-shell generator, starter data catalogs, a TypeScript/Fastify control-plane scaffold, PostgreSQL schema, Docker Compose configuration, and implementation documentation.
 
-> **Repository status:** This repository was empty when inspected. This commit initializes the project documentation and architecture baseline; it does not yet contain a compiled Unreal project or finished Blueprint `.uasset` assets.
+> **Build status:** files have been committed to GitHub, but Unreal compilation and editor-generated Blueprint assets have not yet been verified in an installed Unreal Engine 5.7 environment. Treat this as a source foundation, not a production-ready MMO.
 
-## Project goals
+## Current source foundation
 
-- A persistent open world built from authored landmarks and deterministic procedural regions.
-- A modular Unreal Engine C++ plugin with Blueprint-extensible gameplay systems.
-- Server-authoritative combat, inventory, trading, progression, and world state.
-- Data-driven classes, abilities, items, quests, enemies, biomes, dungeons, and events.
-- A separate MMO control plane for identity, realm discovery, session allocation, persistence, and operations.
-- PC-first development, with console support only after platform SDK access and certification.
+- `Etherroad.uproject`, game/editor/server targets, module build rules, and plugin descriptor.
+- Replicated player health foundation and game mode.
+- Core item definitions, replicated inventory component, replicated attribute component, quest definition/progress component, interactable interface, region definition, and deterministic seed helpers.
+- Unreal Editor Python script to create starter Blueprint and Widget Blueprint shells.
+- Item, region, and quest CSV catalogs.
+- Fastify health and realm-discovery endpoints; session allocation deliberately fails closed with HTTP 503 until real identity verification, capacity-aware allocation, leases/fencing, and signed one-time tickets are implemented.
+- PostgreSQL initial schema, Docker Compose, architecture notes, Blueprint graph guides, and CI metadata/syntax checks.
 
-## Planned repository layout
+## Repository layout
 
 ```text
-Etherroad/
-├── Etherroad.uproject
-├── Config/
-├── Content/
-│   ├── Blueprints/{Characters,AI,Combat,Inventory,Quests,World,UI}
-│   ├── Data/{Items,Abilities,Classes,Quests,Enemies,Biomes,Regions}
-│   ├── Maps/{Startup,Prototype,World}
-│   └── UI/{HUD,Menus,Widgets}
-├── Plugins/EtherroadCore/
-│   ├── EtherroadCore.uplugin
-│   └── Source/
-│       ├── ERCore/
-│       ├── ERGameplay/
-│       ├── ERCombat/
-│       ├── ERInventory/
-│       ├── ERQuest/
-│       ├── ERWorld/
-│       ├── ERGeneration/
-│       ├── ERNetworking/
-│       └── EREditor/
-├── Source/{Etherroad,EtherroadEditor,EtherroadServer}/
-├── Backend/
-│   ├── services/{identity,realms,sessions,persistence}
-│   ├── migrations/
-│   └── tests/
-├── Scripts/Editor/
-├── Tests/{Unit,Integration,Load}/
-└── Docs/
+Etherroad.uproject
+Config/
+Content/Data/{Items,Regions,Quests}/
+Plugins/EtherroadCore/Source/ERCore/
+Source/{Etherroad,EtherroadEditor}/
+Backend/{src,migrations}/
+Scripts/Editor/
+Docs/BlueprintGraphs/
+Tests/
+.github/workflows/
 ```
 
-## Development principles
+## Start developing
 
-1. **Server authority:** clients submit intents; the server validates outcomes.
-2. **Transactional economy:** item transfers and currency movements must be atomic and auditable.
-3. **Deterministic generation:** persist the realm/region seed, generator version, and content-manifest version.
-4. **Bounded simulation:** use World Partition and region/server processes; do not attempt to simulate an entire planet in one Unreal process.
-5. **Capacity measured, not assumed:** large concurrency goals require staged load tests and failure tests.
-6. **Secrets stay out of source:** use environment variables or a secrets manager; commit only safe example configuration.
+1. Install Unreal Engine 5.7 and its matching C++ toolchain.
+2. Clone this repository and open `Etherroad.uproject`.
+3. Generate project files and build the `EtherroadEditor` target.
+4. Enable Unreal's Python Editor Script Plugin and run `Scripts/Editor/CreateEtherroadAssets.py`.
+5. Open each generated asset, wire and validate its graphs/layout, then save it in the editor.
+6. Start the local backend with Docker Compose from `Backend/` or run the Node service directly.
 
-## Getting started
+## Architecture rules
 
-The full Unreal project must be added before it can be opened in Unreal Editor. Once present:
+- The client is untrusted; the server owns combat, loot, inventory, quest progress, and currency.
+- Unreal native networking handles real-time gameplay; HTTP is for control-plane operations.
+- Durable economy changes require database transactions, idempotency, and audit records.
+- Procedural regions use explicit realm/region/seed/generator/content-manifest identities.
+- A logical planet is not one server process. Use World Partition and bounded region simulation.
+- Million-concurrent-player capacity is a target that requires measured load and failure testing.
 
-1. Install Unreal Engine 5.7 and the matching C++ toolchain.
-2. Generate project files from `Etherroad.uproject`.
-3. Build the Editor target.
-4. Run asset-generation scripts inside the Unreal Editor, then save and validate generated assets.
-5. Run backend unit/integration tests and dedicated-server smoke tests before deployment.
+## Key documents
 
-## Scope and non-goals
-
-This repository is an original game project, not a copy of the code, maps, or assets of another commercial MMORPG. References to other games are design comparisons only. A million concurrent players is a long-term capacity target, not a validated capacity claim.
-
-## Documentation
-
-- [Architecture baseline](Docs/Architecture.md)
+- [Architecture](Docs/Architecture.md)
 - [Implementation roadmap](Docs/ROADMAP.md)
-- [Security and validation principles](Docs/SECURITY.md)
+- [Security baseline](Docs/SECURITY.md)
+- [Blueprint asset inventory](Docs/BlueprintGraphs/BlueprintAssetInventory.md)
+- [World generation contract](Docs/WorldGeneration.md)
+- [Test plan](Tests/README.md)
 
 ## License
 
-No license has been selected yet. Until a license is added, do not assume that this repository grants permission to reuse its contents.
+No license has been selected. Do not assume reuse permissions until a license is added.
