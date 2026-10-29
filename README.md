@@ -7,10 +7,10 @@ Etherroad is an original open-world MMORPG prototype targeting Unreal Engine 5.7
 ## Gameplay foundations
 
 - Replicated player character and starter game mode.
-- Core item/region/quest definitions and seed utilities.
-- Replicated inventory, attributes, equipment, XP progression, quest progress, combat ability, and interaction components.
-- Data Asset-based ability definitions with server-side range/cooldown checks.
-- Editor Python script to create starter Blueprint and Widget Blueprint shells.
+- Replicated inventory, attributes, equipment, XP progression, quest progress, combat abilities, and interaction components.
+- Data Asset-based ability definitions with server-side range/cooldown checks and damage routed to supported target health systems.
+- Replicated enemy character and resource node native classes for Blueprint extension.
+- Editor Python script creates starter Blueprint and Widget Blueprint shells, including native enemy/resource parents.
 - Starter CSV catalogs for items, regions, and quests.
 - Fastify health and realm-discovery endpoints. Session allocation intentionally returns HTTP 503 until identity verification, capacity-aware allocation, leases/fencing, and signed one-time tickets are implemented.
 - PostgreSQL initial schema, Docker Compose, architecture notes, Blueprint graph guides, and CI metadata/syntax checks.
@@ -56,7 +56,13 @@ Tests/
 - [Blueprint asset inventory](Docs/BlueprintGraphs/BlueprintAssetInventory.md)
 - [World generation contract](Docs/WorldGeneration.md)
 - [Combat, equipment, and progression](Docs/Systems/Combat-Equipment-Progression.md)
+- [World interaction and AI](Docs/Systems/World-Interaction-and-AI.md)
+- [Backend economy transaction contract](Backend/docs/Economy-Transactions.md)
 - [Test plan](Tests/README.md)
+
+## Important implementation limits
+
+The current code is a starter foundation. Unreal C++ compilation, generated Blueprint assets, multiplayer contention tests, backend integration tests, and production deployment have not been verified. Ability stamina cost, full loot/reward attribution, AI behavior trees, item ownership validation, persistence, authentication, and production session allocation remain incomplete.
 
 ## License
 
