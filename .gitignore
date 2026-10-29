@@ -1,0 +1,34 @@
+# Unreal generated files
+Binaries/
+DerivedDataCache/
+Intermediate/
+Saved/
+.vs/
+.idea/
+*.sln
+*.suo
+*.opensdf
+*.sdf
+*.VC.db
+*.VC.VC.opendb
+
+# IDE / OS
+.DS_Store
+Thumbs.db
+.vscode/
+
+# Secrets and local configuration
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+
+# Node / backend
+node_modules/
+dist/
+coverage/
+
+# Logs and local test output
+*.log
+TestResults/
