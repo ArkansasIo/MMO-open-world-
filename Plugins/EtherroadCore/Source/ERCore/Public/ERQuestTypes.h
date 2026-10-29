@@ -26,6 +26,5 @@ struct FERQuestObjectiveProgress
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Quest", meta=(ClampMin="1"))
     int32 RequiredCount = 1;
 
-    UFUNCTION(BlueprintPure, Category="Quest")
     bool IsComplete() const { return CurrentCount >= RequiredCount; }
 };
