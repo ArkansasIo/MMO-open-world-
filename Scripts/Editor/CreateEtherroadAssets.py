@@ -1,16 +1,18 @@
 """Idempotently create Etherroad starter Blueprint and Widget Blueprint assets.
 
-Run from Unreal Editor with the Python Editor Script Plugin enabled.
-This creates asset shells only; graphs, layout, materials, and data must be configured
-and validated in the editor. Do not run as a standalone Python script.
+Run inside Unreal Editor with the Python Editor Script Plugin enabled after compiling
+the EtherroadEditor target. This creates asset shells only; configure and validate
+graphs, UI, materials, collision, animation, and data assets in the editor.
 """
 import unreal
 
 ROOT = "/Game/Etherroad"
 
+
 def ensure_folder(path):
     if not unreal.EditorAssetLibrary.does_directory_exist(path):
         unreal.EditorAssetLibrary.make_directory(path)
+
 
 def ensure_blueprint(name, folder, parent_class):
     ensure_folder(folder)
@@ -30,6 +32,7 @@ def ensure_blueprint(name, folder, parent_class):
         unreal.log_error(f"[Etherroad] Failed to create: {asset_path}")
     return asset
 
+
 def ensure_widget(name, folder):
     ensure_folder(folder)
     asset_path = f"{folder}/{name}"
@@ -48,19 +51,23 @@ def ensure_widget(name, folder):
         unreal.log_error(f"[Etherroad] Failed to create widget: {asset_path}")
     return asset
 
+
 def main():
-    # Custom native classes should be loaded after a successful C++ editor build.
     player_class = unreal.load_class(None, "/Script/Etherroad.ERPlayerCharacter")
+    enemy_class = unreal.load_class(None, "/Script/ERCore.EREnemyCharacter")
+    resource_class = unreal.load_class(None, "/Script/ERCore.ERResourceNode")
     character_class = unreal.load_class(None, "/Script/Engine.Character")
     actor_class = unreal.load_class(None, "/Script/Engine.Actor")
 
     if not player_class:
         raise RuntimeError("ERPlayerCharacter was not found. Compile the EtherroadEditor target first.")
+    if not enemy_class or not resource_class:
+        raise RuntimeError("ERCore enemy/resource classes were not found. Compile the ERCore plugin first.")
 
     ensure_blueprint("BP_PlayerCharacter", f"{ROOT}/Blueprints/Characters", player_class)
-    ensure_blueprint("BP_EnemyCharacter", f"{ROOT}/Blueprints/Characters", character_class)
+    ensure_blueprint("BP_EnemyCharacter", f"{ROOT}/Blueprints/Characters", enemy_class)
     ensure_blueprint("BP_NPCCharacter", f"{ROOT}/Blueprints/Characters", character_class)
-    ensure_blueprint("BP_ResourceNode", f"{ROOT}/Blueprints/World/Interactables", actor_class)
+    ensure_blueprint("BP_ResourceNode", f"{ROOT}/Blueprints/World/Interactables", resource_class)
     ensure_blueprint("BP_LootContainer", f"{ROOT}/Blueprints/World/Interactables", actor_class)
 
     for widget in (
@@ -78,6 +85,7 @@ def main():
 
     unreal.EditorAssetLibrary.save_directory(ROOT, only_if_is_dirty=False)
     unreal.log("[Etherroad] Starter asset generation complete. Configure graphs and validate each asset.")
+
 
 if __name__ == "__main__":
     main()
