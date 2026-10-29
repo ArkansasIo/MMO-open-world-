@@ -1,0 +1,14 @@
+{
+  "FileVersion": 3,
+  "EngineAssociation": "5.7",
+  "Category": "Games",
+  "Description": "Etherroad open-world MMORPG prototype",
+  "Modules": [
+    { "Name": "Etherroad", "Type": "Runtime", "LoadingPhase": "Default" },
+    { "Name": "EtherroadEditor", "Type": "Editor", "LoadingPhase": "Default" }
+  ],
+  "Plugins": [
+    { "Name": "EnhancedInput", "Enabled": true },
+    { "Name": "EtherroadCore", "Enabled": true }
+  ]
+}
