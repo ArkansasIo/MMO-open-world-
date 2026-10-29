@@ -1,0 +1,15 @@
+{
+  "FileVersion": 3,
+  "Version": 1,
+  "VersionName": "0.1.0",
+  "FriendlyName": "Etherroad Core",
+  "Description": "Reusable core types and gameplay foundation for Etherroad MMO.",
+  "Category": "Gameplay",
+  "CreatedBy": "ArkansasIo",
+  "CanContainContent": true,
+  "IsBetaVersion": true,
+  "Installed": false,
+  "Modules": [
+    { "Name": "ERCore", "Type": "Runtime", "LoadingPhase": "Default" }
+  ]
+}
