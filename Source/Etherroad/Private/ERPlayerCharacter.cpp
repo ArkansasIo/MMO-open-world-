@@ -22,10 +22,7 @@ AERPlayerCharacter::AERPlayerCharacter()
 void AERPlayerCharacter::BeginPlay()
 {
     Super::BeginPlay();
-    if (HasAuthority())
-    {
-        CurrentHealth = FMath::Clamp(CurrentHealth, 0.0f, MaxHealth);
-    }
+    if (HasAuthority()) CurrentHealth = FMath::Clamp(CurrentHealth, 0.0f, MaxHealth);
 }
 
 void AERPlayerCharacter::ApplyServerDamage(float DamageAmount)
@@ -34,6 +31,13 @@ void AERPlayerCharacter::ApplyServerDamage(float DamageAmount)
     CurrentHealth = FMath::Clamp(CurrentHealth - DamageAmount, 0.0f, MaxHealth);
     OnHealthChanged.Broadcast(CurrentHealth, MaxHealth);
     ForceNetUpdate();
+}
+
+float AERPlayerCharacter::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)
+{
+    const float Applied = HasAuthority() ? FMath::Min(FMath::Max(0.0f, DamageAmount), CurrentHealth) : 0.0f;
+    ApplyServerDamage(Applied);
+    return Applied;
 }
 
 float AERPlayerCharacter::GetHealthPercent() const
