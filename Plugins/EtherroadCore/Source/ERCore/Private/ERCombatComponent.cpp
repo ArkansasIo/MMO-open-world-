@@ -2,6 +2,7 @@
 #include "ERCombatAbilityDefinition.h"
 #include "ERAttributeComponent.h"
 #include "GameFramework/Actor.h"
+#include "GameFramework/Controller.h"
 
 UERCombatComponent::UERCombatComponent() { SetIsReplicatedByDefault(true); }
 
@@ -31,13 +32,21 @@ void UERCombatComponent::ServerUseAbility_Implementation(UERCombatAbilityDefinit
 void UERCombatComponent::ApplyAbility(UERCombatAbilityDefinition* Ability, AActor* Target)
 {
     if (!Ability || !IsValid(Target) || !GetOwner() || !GetOwner()->HasAuthority()) return;
-    UERAttributeComponent* Attributes = Target->FindComponentByClass<UERAttributeComponent>();
-    if (!Attributes) return;
 
     float Damage = FMath::Max(0.0f, Ability->BaseDamage);
     if (FMath::FRand() < FMath::Clamp(Ability->CriticalChance, 0.0f, 1.0f))
         Damage *= FMath::Max(1.0f, Ability->CriticalMultiplier);
-    Attributes->ApplyDamage(Damage);
+
+    if (UERAttributeComponent* Attributes = Target->FindComponentByClass<UERAttributeComponent>())
+    {
+        Attributes->ApplyDamage(Damage);
+    }
+    else
+    {
+        AController* InstigatorController = GetOwner()->GetInstigatorController();
+        Target->TakeDamage(Damage, FDamageEvent(), InstigatorController, GetOwner());
+    }
+
     OnAbilityUsed.Broadcast(Ability->AbilityId, Target);
     OnDamageApplied.Broadcast(Target, Damage);
 }
