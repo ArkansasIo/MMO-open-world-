@@ -1,0 +1,4 @@
+QuestId,Title,ObjectiveId,ObjectiveDescription,RequiredCount,ExperienceReward,CurrencyReward
+quest.first_steps,First Steps,objective.talk_guide,Speak to the settlement guide,1,100,25
+quest.herbalist_request,The Herbalist's Request,objective.collect_moonleaf,Collect Moonleaf,5,250,75
+quest.roadside_threat,Threat on the Road,objective.defeat_raiders,Defeat roadside raiders,3,400,120
