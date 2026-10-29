@@ -1,20 +1,22 @@
 #pragma once
-
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
 #include "ERPlayerCharacter.generated.h"
 
+class UERCombatComponent;
+class UEREquipmentComponent;
+class UERInventoryComponent;
+class UERInteractionComponent;
+class UERProgressionComponent;
+class UERQuestComponent;
+
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FERHealthChanged, float, CurrentHealth, float, MaxHealth);
 
-/**
- * Minimal replicated player-character foundation.
- * Production combat must still validate range, cooldown, line of sight, and target authority.
- */
+/** Replicated player-character foundation. Validate all gameplay requests on the server. */
 UCLASS(Blueprintable)
 class ETHERROAD_API AERPlayerCharacter : public ACharacter
 {
     GENERATED_BODY()
-
 public:
     AERPlayerCharacter();
 
@@ -23,6 +25,24 @@ public:
 
     UPROPERTY(ReplicatedUsing=OnRep_CurrentHealth, VisibleInstanceOnly, BlueprintReadOnly, Category="Etherroad|Attributes")
     float CurrentHealth = 100.0f;
+
+    UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Etherroad|Systems")
+    TObjectPtr<UERCombatComponent> CombatComponent;
+
+    UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Etherroad|Systems")
+    TObjectPtr<UEREquipmentComponent> EquipmentComponent;
+
+    UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Etherroad|Systems")
+    TObjectPtr<UERInventoryComponent> InventoryComponent;
+
+    UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Etherroad|Systems")
+    TObjectPtr<UERInteractionComponent> InteractionComponent;
+
+    UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Etherroad|Systems")
+    TObjectPtr<UERProgressionComponent> ProgressionComponent;
+
+    UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Etherroad|Systems")
+    TObjectPtr<UERQuestComponent> QuestComponent;
 
     UPROPERTY(BlueprintAssignable, Category="Etherroad|Events")
     FERHealthChanged OnHealthChanged;
